@@ -46,10 +46,9 @@ public class Brazo extends SubsystemBase {
   }
 
   public void setArmAngle(double angle, double tolerance){
-    double currentArmAngle = getArmAngle();
 
-    while((currentArmAngle > angle - tolerance) && (currentArmAngle < angle + tolerance)){ // revisar si es angulo con tolerancia
-      if(currentArmAngle > angle){ // decidir lado
+    while((getArmAngle() > angle - tolerance) && (getArmAngle() < angle + tolerance)){ // revisar si es angulo con tolerancia
+      if(getArmAngle() > angle){ // decidir lado
         setMotors(-0.5); // cambiar numero
       }else{
         setMotors(0.5); // cambiar numero
