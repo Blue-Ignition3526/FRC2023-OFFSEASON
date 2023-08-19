@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -29,9 +27,6 @@ public class LimeLight extends SubsystemBase {
     private NetworkTableEntry json = m_limeLightTable.getEntry("json"); // Full JSON dump of targeting results
     private NetworkTableEntry tclass = m_limeLightTable.getEntry("tclass"); // Class ID of primary neural detector result or neural classifier result
     private NetworkTableEntry tc = m_limeLightTable.getEntry("tc"); // Get the average HSV color underneath the crosshair region as a NumberArray
-
-    private NetworkTableEntry botpose = m_limeLightTable.getEntry("botpose");
- 
     /**
      * Whether the limelight has any valid targets (0 or 1)
      * @return 0 if there is no target, 1 if there is
