@@ -25,6 +25,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void initialize() {
+        m_out = new garraOut(m_garra, false);
     }
 
     @Override
@@ -49,6 +50,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        m_out.end(interrupted);
     }
 
     @Override

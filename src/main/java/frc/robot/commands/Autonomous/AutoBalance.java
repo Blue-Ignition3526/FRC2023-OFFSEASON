@@ -5,8 +5,8 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.NavX;
 
 public class AutoBalance extends CommandBase {
-  private NavX navx = null; // Navx contiene girosensor
-  private DriveTrain driveTrain = null; // mover
+  private NavX navx; // Navx contiene girosensor
+  private DriveTrain driveTrain; // mover
 
   public AutoBalance(NavX navx, DriveTrain driveTrain){
     this.navx = navx;
