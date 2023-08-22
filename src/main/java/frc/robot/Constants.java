@@ -16,4 +16,10 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class ArmConstants {
+    public static final double minAngle = 25;
+    public static final double maxAngle = 145;
+    public static final double rate = 1;
+  }
 }

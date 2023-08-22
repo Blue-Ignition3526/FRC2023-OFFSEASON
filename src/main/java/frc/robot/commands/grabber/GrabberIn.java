@@ -1,12 +1,12 @@
-package frc.robot.commands.garraCommands;
+package frc.robot.commands.grabber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Garra;
+import frc.robot.subsystems.Grabber;
 
-public class garraIn extends CommandBase {
-    private Garra garra;
+public class GrabberIn extends CommandBase {
+    private Grabber garra;
 
-    public garraIn(Garra garra) {
+    public GrabberIn(Grabber garra) {
         this.garra = garra;
         addRequirements(garra);
     }
