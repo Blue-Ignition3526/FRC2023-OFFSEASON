@@ -16,4 +16,28 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class ArmConstants {
+    public static final double minAngle = 25;
+    public static final double maxAngle = 145;
+    public static final double rate = 1;
+  }
+
+  public static class Physical {
+
+    //! TODO SACADO DE SWERVE (perdon victor)
+    // TODO: cambiar valores, remover no usados
+    public static final double kMaxSpeedMetersPerSecond = 5.0; // Maxima Velocidad en Metros por Segundo
+    public static final double kMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI; // Maxima Velocidad Angular en Radianes por Segundo
+
+    public static final double kMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
+    public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI / 4; // Maxima Aceleracion Angular
+
+    public static final double kTeleopMaxSpeedMetersPerSecond = kMaxSpeedMetersPerSecond / 4; // Maxima Velocidad en Metros por Segundo
+    public static final double kTeleopMaxAngularSpeedRadiansPerSecond = kMaxAngularSpeedRadiansPerSecond / 4; // Maxima Velocidad Angular en Radianes por Segundo
+
+    public static final double kTeleopMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
+    public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3; // Maxima Aceleracion Angular
+
+  }
 }
