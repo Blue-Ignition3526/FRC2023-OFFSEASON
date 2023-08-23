@@ -25,7 +25,7 @@ public class RobotContainer {
   private final Trigger m_DC_bButton = m_driverController.b();
 
   public RobotContainer() {
-    m_DriveTrain.setDefaultCommand(new Drive(m_DriveTrain, () -> m_driverController.getLeftY(), () -> m_driverController.getRightX()));
+    m_DriveTrain.setDefaultCommand(new Drive(m_DriveTrain, () -> m_driverController.getLeftY(), () -> m_driverController.getLeftX(), () -> m_driverController.getRightY()));
     m_arm.setDefaultCommand(new SetArmAngle(m_arm, 30));
     configureBindings();
   }

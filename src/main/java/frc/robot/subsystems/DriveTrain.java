@@ -1,5 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
+
 // Librerias a Importar
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -31,6 +38,9 @@ public class DriveTrain extends SubsystemBase {
   private final Encoder m_rightEncoder = new Encoder(2, 3);
   private final AHRS m_navx = new AHRS(Port.kMXP);
 
+  private final DifferentialDriveKinematics m_ddKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(26));
+  private final DifferentialDriveOdometry m_ddOdometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+
   public DriveTrain() {
     // Invertir los Motores del Lado Izquierdo
     m_leftMotors.setInverted(true);
@@ -54,15 +64,28 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Encoder", m_leftEncoder.get());
     SmartDashboard.putNumber("Right Encoder", m_rightEncoder.get());
     SmartDashboard.putNumber("Right Distance", getEncoderDistance());
+
+    m_ddOdometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
   }
 
-  // Funciones del Subsistema
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(ChassisSpeeds speeds){
+    return m_ddKinematics.toWheelSpeeds(speeds);
+  }
 
-  public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+  public void arcadeDrive(ChassisSpeeds speeds) {
+    DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds(speeds);
+    m_leftMotors.set(wheelSpeeds.leftMetersPerSecond);
+    m_rightMotors.set(wheelSpeeds.rightMetersPerSecond);
   }
 
   public double getEncoderDistance() {
     return m_rightEncoder.getDistance() / 360 * 50;
+  }
+
+  public final double getYaw(){
+    return m_navx.getYaw();
+  }
+  public final Rotation2d getYawRotation2d(){
+    return Rotation2d.fromDegrees(getYaw());
   }
 }
