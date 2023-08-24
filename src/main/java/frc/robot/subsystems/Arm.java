@@ -53,7 +53,7 @@ public class Arm extends SubsystemBase {
 
   public double getArmAngle(){
     // Convertir los ticks del encoder al angulo absoluto del brazo
-    return m_armEncoder.getAbsolutePosition();
+    return m_armEncoder.getAbsolutePosition() * 360;
   }
 
   public void setArmAngle(double angle) {
