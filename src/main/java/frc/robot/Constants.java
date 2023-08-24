@@ -33,8 +33,8 @@ public final class Constants {
     public static final double kMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
     public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI / 4; // Maxima Aceleracion Angular
 
-    public static final double kTeleopMaxSpeedMetersPerSecond = kMaxSpeedMetersPerSecond / 4; // Maxima Velocidad en Metros por Segundo
-    public static final double kTeleopMaxAngularSpeedRadiansPerSecond = kMaxAngularSpeedRadiansPerSecond / 4; // Maxima Velocidad Angular en Radianes por Segundo
+    public static final double kTeleopMaxSpeedMetersPerSecond = 3; // Maxima Velocidad en Metros por Segundo
+    public static final double kTeleopMaxAngularSpeedRadiansPerSecond = 3; // Maxima Velocidad Angular en Radianes por Segundo
 
     public static final double kTeleopMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
     public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3; // Maxima Aceleracion Angular
