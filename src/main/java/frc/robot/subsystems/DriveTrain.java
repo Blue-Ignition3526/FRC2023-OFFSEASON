@@ -21,10 +21,10 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain extends SubsystemBase {
   // Declarar los Motores
-  private final WPI_TalonSRX m_leftMotor1 = new WPI_TalonSRX(4);
+  private final WPI_TalonSRX m_leftMotor1 = new WPI_TalonSRX(2);
   private final WPI_TalonSRX m_leftMotor2 = new WPI_TalonSRX(3);
-  private final WPI_TalonSRX m_rightMotor1 = new WPI_TalonSRX(2);
-  private final WPI_TalonSRX m_rightMotor2 = new WPI_TalonSRX(1);
+  private final WPI_TalonSRX m_rightMotor1 = new WPI_TalonSRX(4);
+  private final WPI_TalonSRX m_rightMotor2 = new WPI_TalonSRX(5);
 
   // Declarar los Grupos de Motores
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2);

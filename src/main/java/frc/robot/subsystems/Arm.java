@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private final WPI_TalonSRX m_pulleyLeftLeft =  new WPI_TalonSRX(8);
-  private final WPI_TalonSRX m_pulleyLeftRight =  new WPI_TalonSRX(7);
-  private final WPI_TalonSRX m_pulleyRightLeft =  new WPI_TalonSRX(6);
-  private final WPI_TalonSRX m_pulleyRightRight =  new WPI_TalonSRX(5);
+  private final WPI_TalonSRX m_pulleyLeftLeft =  new WPI_TalonSRX(9);
+  private final WPI_TalonSRX m_pulleyLeftRight =  new WPI_TalonSRX(8);
+  private final WPI_TalonSRX m_pulleyRightLeft =  new WPI_TalonSRX(7);
+  private final WPI_TalonSRX m_pulleyRightRight =  new WPI_TalonSRX(6);
 
   private final MotorControllerGroup m_pulleyLeft = new MotorControllerGroup(m_pulleyLeftLeft, m_pulleyLeftRight);
   private final MotorControllerGroup m_pulleyRight = new MotorControllerGroup(m_pulleyRightLeft, m_pulleyRightRight);
