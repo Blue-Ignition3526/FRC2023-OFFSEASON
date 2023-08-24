@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -72,8 +73,8 @@ public class DriveTrain extends SubsystemBase {
     DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds(speeds);
 
     //TODO: checar esto porque metros por segundo no creo que sea de -1 a 1
-    m_leftMotors.set(wheelSpeeds.leftMetersPerSecond);
-    m_rightMotors.set(wheelSpeeds.rightMetersPerSecond);
+    m_leftMotors.set(MathUtil.clamp(wheelSpeeds.leftMetersPerSecond, -0.8, 0.8));
+    m_rightMotors.set(MathUtil.clamp(wheelSpeeds.rightMetersPerSecond, -0.8, 0.8));
   }
 
   public double getEncoderDistance() {

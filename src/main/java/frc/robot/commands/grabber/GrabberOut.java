@@ -18,7 +18,7 @@ public class GrabberOut extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        garra.garraSet(1);
+        garra.garraSet(0.7);
     }
 
     // Called once the command ends or is interrupted.

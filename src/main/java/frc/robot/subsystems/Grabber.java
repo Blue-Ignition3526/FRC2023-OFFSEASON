@@ -10,6 +10,7 @@ public class Grabber extends SubsystemBase {
     public CANSparkMax m_grabberMotor; // motor con spark
 
     public Grabber(){
+        //TODO: poner id spark
         m_grabberMotor = new CANSparkMax(1, MotorType.kBrushless); // motor *cambiar id a id de motor*
     }
 
