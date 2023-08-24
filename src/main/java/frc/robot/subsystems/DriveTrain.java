@@ -11,7 +11,6 @@ import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,9 +28,6 @@ public class DriveTrain extends SubsystemBase {
   // Declarar los Grupos de Motores
   private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2);
   private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2);
-
-  // Declarar el DriveTrain Diferencial
-  private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
   // Declarar los Sensores
   private final Encoder m_leftEncoder = new Encoder(0, 1);
@@ -74,6 +70,8 @@ public class DriveTrain extends SubsystemBase {
 
   public void arcadeDrive(ChassisSpeeds speeds) {
     DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds(speeds);
+
+    //TODO: checar esto porque metros por segundo no creo que sea de -1 a 1
     m_leftMotors.set(wheelSpeeds.leftMetersPerSecond);
     m_rightMotors.set(wheelSpeeds.rightMetersPerSecond);
   }
@@ -82,10 +80,16 @@ public class DriveTrain extends SubsystemBase {
     return m_rightEncoder.getDistance() / 360 * 50;
   }
 
-  public final double getYaw(){
+  public void stop() {
+    m_leftMotors.set(0);
+    m_rightMotors.set(0);
+  }
+
+  public final double getYaw() {
     return m_navx.getYaw();
   }
-  public final Rotation2d getYawRotation2d(){
+
+  public final Rotation2d getYawRotation2d() {
     return Rotation2d.fromDegrees(getYaw());
   }
 }
