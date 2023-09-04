@@ -1,54 +1,116 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Drive;
-import frc.robot.commands.arm.ChangeArmAngle;
-import frc.robot.commands.arm.SetArmAngle;
-import frc.robot.commands.grabber.GrabberHold;
-import frc.robot.commands.grabber.GrabberIn;
-import frc.robot.commands.grabber.GrabberOut;
+import frc.robot.Enum.DriveDirection;
+import frc.robot.commands.Arm.MoveArmAngle;
+import frc.robot.commands.Arm.MoveArmDown;
+import frc.robot.commands.Arm.MoveArmUp;
+import frc.robot.commands.Autonomous.LeaveCommunity;
+import frc.robot.commands.Autonomous.LeaveGamePieceAndCommunity;
+import frc.robot.commands.Autonomous.ThrowGamePieceAndCommunity;
+import frc.robot.commands.DriveTrain.Drive;
+import frc.robot.commands.DriveTrain.MoveDistance;
+import frc.robot.commands.DriveTrain.ResetDriveTrainEncoders;
+import frc.robot.commands.Grabber.SetGrabberHold;
+import frc.robot.commands.Grabber.SetGrabberIn;
+import frc.robot.commands.Grabber.SetGrabberOut;
+
+// Subsystems /////////////////////////////////////////////////////////////////////////////////////////
+
+import frc.robot.subsystems.NavX;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.LED;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Grabber;
 
+// Other Libraries ////////////////////////////////////////////////////////////////////////////////////
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 public class RobotContainer {
 
-  private final DriveTrain m_DriveTrain = new DriveTrain();
+// Subsystems /////////////////////////////////////////////////////////////////////////////////////////
+
+  private final DriveTrain m_driveTrain = new DriveTrain();
   private final Arm m_arm = new Arm();
-  private final Grabber m_garra = new Grabber();
+  private final Grabber m_grabber = new Grabber();
+  private final LimeLight m_limeLight = new LimeLight();
+  //private final ColorSensor m_colorSensor = new ColorSensor();
+  //private final LED m_led = new LED();
 
-  private final CommandXboxController m_driverController = new CommandXboxController(0);
+  private final SendableChooser<String> autonomousChooser = new SendableChooser<>();
 
-  private final Trigger m_DC_aButton = m_driverController.a();
-  private final Trigger m_DC_bButton = m_driverController.b();
+// Controller & Triggers //////////////////////////////////////////////////////////////////////////////
+
+  private final CommandXboxController m_driverController = new CommandXboxController(Constants.driverControllerPort);
+  private final CommandXboxController m_operatorController = new CommandXboxController(Constants.operatorControllerPort);
+
+  private final Trigger m_OC_rightBumper = m_operatorController.rightBumper();
+
+  private final Trigger m_OC_aButton = m_operatorController.a();
+  private final Trigger m_OC_bButton = m_operatorController.b();
+
+  private final Trigger m_OC_povUp = m_operatorController.povUp();
+  private final Trigger m_OC_povDown = m_operatorController.povDown();
+
+
+// Robot Container /////////////////////////////////////////////////////////////////////////////////////
 
   public RobotContainer() {
-    m_DriveTrain.setDefaultCommand(new Drive(m_DriveTrain, () -> m_driverController.getLeftY(), () -> m_driverController.getRightX()));
+    autonomousChooser.addOption("Leave Community", "LeaveCommunity");
+    autonomousChooser.addOption("Leave Game Piece and Community", "LeaveGamePieceAndCommunity");
+    autonomousChooser.addOption("Throw Game Piece and Leave Community", "ThrowGamePieceAndCommunity");
+    autonomousChooser.setDefaultOption("Leave Community", "LeaveCommunity");
+    SmartDashboard.putData(autonomousChooser);
+
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, () -> m_driverController.getLeftY(), () -> m_driverController.getRightY()));
+
     configureBindings();
   }
 
-  
+// Configure Bindings //////////////////////////////////////////////////////////////////////////////////
+
   private void configureBindings() {
-    //m_DC_aButton.onTrue(new frc.robot.commands.armCommands.armUp(m_arm));
-    //m_DC_bButton.onTrue(new frc.robot.commands.armCommands.armDown(m_arm));
+    m_operatorController.povUp().onTrue(new MoveArmUp(m_arm, true));
+    m_operatorController.povUp().onFalse(new MoveArmUp(m_arm, false));
 
-    // TODO: extract command to another file
-    m_DC_aButton.whileTrue(new ChangeArmAngle(m_arm, 5));
-    m_DC_bButton.whileTrue(new ChangeArmAngle(m_arm, -5));
+    m_operatorController.povDown().onTrue(new MoveArmDown(m_arm, true));
+    m_operatorController.povDown().onFalse(new MoveArmDown(m_arm, false));
 
-    m_driverController.leftTrigger(0.85).toggleOnTrue(new GrabberIn(m_garra));
+    m_operatorController.leftTrigger(0.85).toggleOnTrue(new SetGrabberIn(m_grabber));
 
-    m_driverController.rightTrigger(0.85).onTrue(new GrabberOut(m_garra, true));
-    m_driverController.rightTrigger(0.85).onFalse(new GrabberOut(m_garra, false));
+    m_operatorController.rightTrigger(0.85).onTrue(new SetGrabberOut(m_grabber, true));
+    m_operatorController.rightTrigger(0.85).onFalse(new SetGrabberOut(m_grabber, false));
 
-    m_driverController.y().toggleOnTrue(new GrabberHold(m_garra));
+    m_operatorController.a().toggleOnTrue(new SetGrabberHold(m_grabber));
   }
 
-  
   public Command getAutonomousCommand() {
-    return null;
+    switch(autonomousChooser.getSelected()) {
+      case "LeaveCommunity": {
+        return new LeaveCommunity(m_driveTrain, DriveDirection.FORWARD);
+      }
+
+      case "LeaveGamePieceAndCommunity": {
+        return new LeaveGamePieceAndCommunity(m_driveTrain, m_arm, m_grabber);
+      }
+
+      case "ThrowGamePieceAndCommunity": {
+        return new ThrowGamePieceAndCommunity(m_driveTrain, m_arm, m_grabber);
+      }
+
+      default: {
+        return new WaitCommand(1);
+      }
+    }
   }
 }

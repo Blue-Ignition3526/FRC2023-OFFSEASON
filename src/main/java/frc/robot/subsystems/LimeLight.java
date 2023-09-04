@@ -27,6 +27,7 @@ public class LimeLight extends SubsystemBase {
     private NetworkTableEntry json = m_limeLightTable.getEntry("json"); // Full JSON dump of targeting results
     private NetworkTableEntry tclass = m_limeLightTable.getEntry("tclass"); // Class ID of primary neural detector result or neural classifier result
     private NetworkTableEntry tc = m_limeLightTable.getEntry("tc"); // Get the average HSV color underneath the crosshair region as a NumberArray
+ 
     /**
      * Whether the limelight has any valid targets (0 or 1)
      * @return 0 if there is no target, 1 if there is

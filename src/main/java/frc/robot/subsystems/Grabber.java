@@ -1,24 +1,40 @@
 package frc.robot.subsystems;
 
+// Librerias importadas por usuario /////////////////////////////////////////////////////
+
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
+// Setup ////////////////////////////////////////////////////////////////////////////////
 
 public class Grabber extends SubsystemBase {
-    public CANSparkMax m_grabberMotor; // motor con spark
 
-    public Grabber(){
-        m_grabberMotor = new CANSparkMax(10, MotorType.kBrushless); 
-    }
+  public CANSparkMax grabber;
+  
+  // Robot Init ///////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
+  public Grabber() {
+    try {
+      this.grabber = new CANSparkMax(Constants.Motors.BaymaxMotors.Grabber.grabber, MotorType.kBrushless);
+    } catch (Exception err) {
+      System.out.println("Error, Grabber motor disabled: " + err);
     }
+  }
 
-    public void garraSet(double speed){
-        m_grabberMotor.set(speed);  // controlar neo
-    }
+  // Robot Periodic ///////////////////////////////////////////////////////////////////////
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+
+  // Subsystem commands ///////////////////////////////////////////////////////////////////
+
+  public void grabberSet(double speed) {
+    try {
+      grabber.set(speed);
+    } catch (Exception err) {}
+  }
 }

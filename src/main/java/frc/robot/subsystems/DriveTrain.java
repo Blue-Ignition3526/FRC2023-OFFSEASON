@@ -1,96 +1,77 @@
 package frc.robot.subsystems;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.util.Units;
-
-// Librerias a Importar
-
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C.Port;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import frc.robot.Constants;
+
+// Librerias importadas por usuario /////////////////////////////////////////////////////
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+// Setup ////////////////////////////////////////////////////////////////////////////////
 
 public class DriveTrain extends SubsystemBase {
-  // Declarar los Motores
-  private final WPI_TalonSRX m_leftMotor1 = new WPI_TalonSRX(2);
-  private final WPI_TalonSRX m_leftMotor2 = new WPI_TalonSRX(3);
-  private final WPI_TalonSRX m_rightMotor1 = new WPI_TalonSRX(4);
-  private final WPI_TalonSRX m_rightMotor2 = new WPI_TalonSRX(5);
+  
+  private final WPI_TalonSRX m_leftMotor1 = new WPI_TalonSRX(Constants.Motors.DriveTrainMotors.Left.left1);
+  private final WPI_TalonSRX m_leftMotor2 = new WPI_TalonSRX(Constants.Motors.DriveTrainMotors.Left.left2);
 
-  // Declarar los Grupos de Motores
-  private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2);
-  private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2);
+  private final WPI_TalonSRX m_rightMotor1 = new WPI_TalonSRX(Constants.Motors.DriveTrainMotors.Right.right1);
+  private final WPI_TalonSRX m_rightMotor2 = new WPI_TalonSRX(Constants.Motors.DriveTrainMotors.Right.right2);
 
-  // Declarar los Sensores
-  private final Encoder m_leftEncoder = new Encoder(0, 1);
-  private final Encoder m_rightEncoder = new Encoder(2, 3);
-  private final AHRS m_navx = new AHRS(Port.kMXP);
+  public final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMotor1, m_leftMotor2);
+  public final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMotor1, m_rightMotor2);
 
-  private final DifferentialDriveKinematics m_ddKinematics = new DifferentialDriveKinematics(Units.inchesToMeters(26));
-  private final DifferentialDriveOdometry m_ddOdometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+  public final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
+
+  public final Encoder m_leftEncoder = new Encoder(Constants.Encoders.leftEncoder[0], Constants.Encoders.leftEncoder[1], true, Encoder.EncodingType.k4X);
+  public final Encoder m_rightEncoder = new Encoder(Constants.Encoders.rightEncoder[0], Constants.Encoders.rightEncoder[1], false, Encoder.EncodingType.k4X);
 
   public DriveTrain() {
-    // Invertir los Motores del Lado Izquierdo
     m_leftMotors.setInverted(true);
 
-    // Configurar los modos neutrales de los Motores
     m_leftMotor1.setNeutralMode(NeutralMode.Brake);
     m_leftMotor2.setNeutralMode(NeutralMode.Brake);
     m_rightMotor1.setNeutralMode(NeutralMode.Brake);
     m_rightMotor2.setNeutralMode(NeutralMode.Brake);
 
-    // Invertir el encoder del lado izquierdo
     m_leftEncoder.setReverseDirection(true);
-
-    // Resetear NavX
-    m_navx.reset();
   }
 
   @Override
   public void periodic() {
-    // Codigo que repite
-    SmartDashboard.putNumber("Left Encoder", m_leftEncoder.get());
-    SmartDashboard.putNumber("Right Encoder", m_rightEncoder.get());
-    SmartDashboard.putNumber("Right Distance", getEncoderDistance());
-
-    m_ddOdometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    SmartDashboard.putNumber("Encoder Count Left", m_leftEncoder.get());
+    SmartDashboard.putNumber("Encoder Rate Left", m_leftEncoder.getRate());
+    SmartDashboard.putBoolean("Is stopped Left", m_leftEncoder.getStopped());
+    SmartDashboard.putNumber("Encoder Count Right", m_rightEncoder.get());
+    SmartDashboard.putNumber("Encoder Rate Right", m_rightEncoder.getRate());
+    SmartDashboard.putBoolean("Is stopped Right", m_rightEncoder.getStopped());
   }
 
-  public DifferentialDriveWheelSpeeds getWheelSpeeds(ChassisSpeeds speeds){
-    return m_ddKinematics.toWheelSpeeds(speeds);
+  public void drive(double leftSideSpeed, double rightSideSpeed) {
+    m_drive.tankDrive(leftSideSpeed, rightSideSpeed);
   }
 
-  public void arcadeDrive(ChassisSpeeds speeds) {
-    DifferentialDriveWheelSpeeds wheelSpeeds = getWheelSpeeds(speeds);
+  public void arcadeDrive(double x, double z) {
+    m_drive.arcadeDrive(x, z);
+  }
 
-    //TODO: checar esto porque metros por segundo no creo que sea de -1 a 1
-    m_leftMotors.set(MathUtil.clamp(wheelSpeeds.leftMetersPerSecond, -0.8, 0.8));
-    m_rightMotors.set(MathUtil.clamp(wheelSpeeds.rightMetersPerSecond, -0.8, 0.8));
+  public void resetEncoder() {
+    m_leftEncoder.reset();
+    m_rightEncoder.reset();
+  }
+
+  public double getEncoderAvg() {
+    return (m_leftEncoder.get() + m_rightEncoder.get()) * 0.5;
+  }
+
+  public double getCmTicks(double cm) {
+    return cm / 45 * 360;
   }
 
   public double getEncoderDistance() {
-    return m_rightEncoder.getDistance() / 360 * 50;
-  }
-
-  public void stop() {
-    m_leftMotors.set(0);
-    m_rightMotors.set(0);
-  }
-
-  public final double getYaw() {
-    return m_navx.getYaw();
-  }
-
-  public final Rotation2d getYawRotation2d() {
-    return Rotation2d.fromDegrees(getYaw());
+    return getEncoderAvg() / 360 * 50;
   }
 }

@@ -1,43 +1,74 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
+import edu.wpi.first.wpilibj.util.Color;
+
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+  public static final double autonomousSpeed = 0.3;
+
+  public static final int driverControllerPort = 0;
+  public static final int operatorControllerPort = 1;
+
+  public static final double balanceLowerThreshold = -3;
+  public static final double balanceUpperThreshold = 3;
+
+  public static final double balanceAdjustmentSpeed = 0.15;
+
+  public static final int baymaxBottomLimitSwitch = 6;
+  public static final int canifierId = 20;
+
+  public static final double limeLightHeight = 187.5;
+  public static final double armLength = 57;
+
+  public static final Color coneColor = new Color(0.37254901960784315, 0.5254901960784314, 0.10588235294117647);
+  public static final Color cubeColor = new Color(0.19215686274509805, 0.29411764705882354, 0.5058823529411764);
+  
+  public static final class Encoders {
+    public static final int[] leftEncoder = new int[]{0, 1};
+    public static final int[] rightEncoder = new int[]{2, 3};
+    public static final int[] armEncoder = new int[]{7, 8};
   }
 
-  public static class ArmConstants {
-    public static final double minAngle = 25;
-    public static final double maxAngle = 145;
-    public static final double rate = 1;
+  public static final class Speeds {
+    public static final double grabberIn = -0.65;
+    public static final double grabberOut = 0.7;
+    public static final double grabberCube = 0.8;
+
+    public static final double armUp = 0.4;
+    public static final double armDown = -0.4;
   }
 
-  public static class Physical {
+  public final class Motors {
 
-    //! TODO SACADO DE SWERVE (perdon victor)
-    // TODO: cambiar valores, remover no usados
-    public static final double kMaxSpeedMetersPerSecond = 5.0; // Maxima Velocidad en Metros por Segundo
-    public static final double kMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI; // Maxima Velocidad Angular en Radianes por Segundo
+    // Drive Train Motors /////////////////////////////////////////////////////////////////
 
-    public static final double kMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
-    public static final double kMaxAngularAccelerationUnitsPerSecond = Math.PI / 4; // Maxima Aceleracion Angular
+    public final class DriveTrainMotors {
+      public final class Left {
+        public static final int left1 = 4;
+        public static final int left2 = 3;
+      }
 
-    public static final double kTeleopMaxSpeedMetersPerSecond = 3; // Maxima Velocidad en Metros por Segundo
-    public static final double kTeleopMaxAngularSpeedRadiansPerSecond = 3; // Maxima Velocidad Angular en Radianes por Segundo
+      public final class Right {
+        public static final int right1 = 2;
+        public static final int right2 = 1;
+      }
+    }
 
-    public static final double kTeleopMaxAccelerationUnitsPerSecond = 3; // Maxima Aceleracion
-    public static final double kTeleopMaxAngularAccelerationUnitsPerSecond = 3; // Maxima Aceleracion Angular
+    // Arm Motors /////////////////////////////////////////////////////////////////////
 
+    public final class BaymaxMotors {
+      public final class Left {
+        public static final int left = 8;
+        public static final int right = 7;
+      }
+
+      public final class Right {
+        public static final int left = 6;
+        public static final int right = 5;
+      }
+
+      public final class Grabber {
+        public static final int grabber = 9;
+      }
+    }
   }
 }

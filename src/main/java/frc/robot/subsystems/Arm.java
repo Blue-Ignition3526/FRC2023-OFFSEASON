@@ -1,67 +1,121 @@
 package frc.robot.subsystems;
 
+// Librerias importadas por usuario /////////////////////////////////////////////////////
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+// Setup ////////////////////////////////////////////////////////////////////////////////
+
 public class Arm extends SubsystemBase {
-  private final WPI_TalonSRX m_pulleyLeftLeft =  new WPI_TalonSRX(9);
-  private final WPI_TalonSRX m_pulleyLeftRight =  new WPI_TalonSRX(8);
-  private final WPI_TalonSRX m_pulleyRightLeft =  new WPI_TalonSRX(7);
-  private final WPI_TalonSRX m_pulleyRightRight =  new WPI_TalonSRX(6);
+  public WPI_TalonSRX pulleyLeftLeft = null;
+  public WPI_TalonSRX pulleyLeftRight = null;
 
-  private final MotorControllerGroup m_pulleyLeft = new MotorControllerGroup(m_pulleyLeftLeft, m_pulleyLeftRight);
-  private final MotorControllerGroup m_pulleyRight = new MotorControllerGroup(m_pulleyRightLeft, m_pulleyRightRight);
-  
-  private final MotorControllerGroup m_allMotors = new MotorControllerGroup(m_pulleyLeft, m_pulleyRight);
+  public MotorControllerGroup leftMotors = null;
 
-  private final DutyCycleEncoder m_armEncoder = new DutyCycleEncoder(7); 
+  public WPI_TalonSRX pulleyRightLeft = null;
+  public WPI_TalonSRX pulleyRightRight = null;
 
-  private PIDController pid = new PIDController(0.3, 0, 0);
-  private double angle = Constants.ArmConstants.minAngle;
+  public MotorControllerGroup rightMotors = null;
+
+  public MotorControllerGroup allMotors = null;
+
+  public DigitalInput bottomLimitSwitch = null;
+
+  public Encoder m_Encoder = null;
+
+  // Robot Init ///////////////////////////////////////////////////////////////////////////
 
   public Arm() {
-    m_pulleyLeft.setInverted(true);
+    // Try getting all motor controllers and handle the errors
 
-    m_pulleyLeftLeft.setNeutralMode(NeutralMode.Brake);
-    m_pulleyLeftRight.setNeutralMode(NeutralMode.Brake);
-    m_pulleyRightLeft.setNeutralMode(NeutralMode.Brake);
-    m_pulleyRightRight.setNeutralMode(NeutralMode.Brake);
+    try {
+      this.pulleyLeftLeft = new WPI_TalonSRX(Constants.Motors.BaymaxMotors.Left.left);
+      this.pulleyLeftRight = new WPI_TalonSRX(Constants.Motors.BaymaxMotors.Left.right);
 
-    m_armEncoder.setDistancePerRotation(360);
+      this.leftMotors = new MotorControllerGroup(pulleyLeftLeft, pulleyLeftRight);
+    } catch (Exception err) {
+      System.out.println("Error, Left pulley motors disabled: " + err);
+    }
+
+    try {
+      this.pulleyRightLeft = new WPI_TalonSRX(Constants.Motors.BaymaxMotors.Right.left);
+      this.pulleyRightRight = new WPI_TalonSRX(Constants.Motors.BaymaxMotors.Right.right);
+  
+      this.rightMotors = new MotorControllerGroup(pulleyRightLeft, pulleyRightRight);
+    } catch (Exception err) {
+      System.out.println("Error, Right pulley motors disabled: " + err);
+    }
+
+    try {
+      this.allMotors = new MotorControllerGroup(leftMotors, rightMotors);
+    } catch (Exception err) {
+      System.out.println("Error, All pulley motors disabled: " + err);
+    }
+
+    try {
+      this.bottomLimitSwitch = new DigitalInput(Constants.baymaxBottomLimitSwitch);
+    } catch (Exception err) {
+      System.out.println("Error, Bottom limit switch disabled: " + err);
+    }
+
+    try {
+      this.m_Encoder = new Encoder(Constants.Encoders.armEncoder[0], Constants.Encoders.armEncoder[1], true, Encoder.EncodingType.k4X);
+    } catch (Exception err) {
+      System.out.println("Error, Arm encoder disabled: " + err);
+    }
+
+    // Configure the motors
+    leftMotors.setInverted(true);
+    pulleyLeftLeft.setNeutralMode(NeutralMode.Brake);
+    pulleyLeftRight.setNeutralMode(NeutralMode.Brake);
+    pulleyRightLeft.setNeutralMode(NeutralMode.Brake);
+    pulleyRightRight.setNeutralMode(NeutralMode.Brake);
   }
+
+  // Robot Periodic ///////////////////////////////////////////////////////////////////////
 
   @Override
   public void periodic() {
-    // Actualizar angulo del brazo en smartdashboard
-    SmartDashboard.putNumber("Arm Angle", this.getArmAngle());
+    SmartDashboard.putNumber("Arm Encoder Raw", m_Encoder.get());
+    SmartDashboard.putNumber("Arm Rotation", getEncoderAngle());
 
-    // Siempre actualizar el angulo del brazo al deseado
-    this.setMotors(pid.calculate(this.getArmAngle(), this.angle));
+    try {
+      if (!bottomLimitSwitch.get()) m_Encoder.reset();
+    } catch (Exception err) {}
   }
 
-  public void setMotors(double speed) {
-    m_allMotors.set(speed);
+  // Subsystem commands //////////////////////////////////////////////////////////////////////
+
+  public void armSet(double speed) {
+    try {
+      allMotors.set(speed);
+    } catch (Exception err) {}
   }
 
-  public double getArmAngle(){
-    // Convertir los ticks del encoder al angulo absoluto del brazo
-    return m_armEncoder.getAbsolutePosition() * 360;
+  public double getEncoder() {
+    try {
+      return m_Encoder.get();
+    } catch (Exception err) {
+      return 0;
+    }
   }
 
-  public void setArmAngle(double angle) {
-    // Actualizar angulo deseado del brazo, con un minimo y un maximo definido en constants
-    this.angle = MathUtil.clamp(angle, Constants.ArmConstants.minAngle, Constants.ArmConstants.maxAngle);
+  public double getEncoderAngle() {
+    try {
+      return m_Encoder.get() * 360 / 2048;
+    } catch (Exception err) {
+      return 0;
+    }
   }
 
-  public void changeArmAngle(double delta) {
-    this.setArmAngle(this.angle + delta);
+  public void resetEncoder() {
+    m_Encoder.reset();
   }
 }
