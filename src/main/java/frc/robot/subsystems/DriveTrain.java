@@ -34,11 +34,11 @@ public class DriveTrain extends SubsystemBase {
     private final Encoder m_rightEncoder = new Encoder(Constants.Sensors.kRightEncoderPorts[0], Constants.Sensors.kRightEncoderPorts[1]);
 
   // Initialize the Gyro
-  private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
+  //private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
 
   // Kinematics and Odometry Instances
   private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Constants.Robot.kWidthInches));
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    //private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 
   public DriveTrain() {
     // Invert the left side motors
@@ -63,12 +63,12 @@ public class DriveTrain extends SubsystemBase {
     // Smart Dashboard Data
     SmartDashboard.putNumber("Left Encoder", m_leftEncoder.get());
     SmartDashboard.putNumber("Right Encoder", m_rightEncoder.get());
-    SmartDashboard.putString("Position 2d", m_odometry.toString());
-    SmartDashboard.putNumber("Angle", getYawAngle());
+    //SmartDashboard.putString("Position 2d", m_odometry.toString());
+    //SmartDashboard.putNumber("Angle", getYawAngle());
 
     // Update the odometry in the periodic block
 
-    m_odometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    //m_odometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
   }
 
   // Subsystem Functions ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,16 +107,16 @@ public class DriveTrain extends SubsystemBase {
   * Converts the angle of the robot to a Rotation2d.
   * @return The Yaw angle of the robot as a Rotation2d.
   */ 
-  public final Rotation2d getYawRotation2d() {
+  /* public final Rotation2d getYawRotation2d() {
     return Rotation2d.fromDegrees(getYawAngle());
-  } 
+  }  */
 
   /**
   * Obtains the Yaw angle of the robot obtained from the NavX.
   * (Yaw is the angle the robot is facing, since the gryoscope is mounted facing up, it returns the Roll angle)
   * @return The Roll angle of the robot in degrees.
   */
-  public final double getYawAngle() {
+  /* public final double getYawAngle() {
     return m_gyro.getRoll();
-  } 
+  }  */
 }

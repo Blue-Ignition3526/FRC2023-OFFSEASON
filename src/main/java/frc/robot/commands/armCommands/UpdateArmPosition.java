@@ -15,7 +15,7 @@ public class UpdateArmPosition extends CommandBase {
     this.m_Brazo = m_Brazo;
     this.angle = angle;
     this.difference = angle - m_Brazo.getArmAngle();
-    this.direction = difference > 0 ? Constants.Robot.kArmUpSpeed : Constants.Robot.kArmDownSpeed;
+    this.direction = (difference > 0) ? Constants.Robot.kArmUpSpeed : Constants.Robot.kArmDownSpeed;
     addRequirements(m_Brazo);
   }
 
