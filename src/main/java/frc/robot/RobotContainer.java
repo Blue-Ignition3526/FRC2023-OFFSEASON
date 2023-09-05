@@ -4,12 +4,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drive;
+import frc.robot.commands.MoveDistance;
 import frc.robot.commands.armCommands.ArmDown;
 import frc.robot.commands.armCommands.ArmUp;
 import frc.robot.commands.armCommands.UpdateArmPosition;
-import frc.robot.commands.garraCommands.EndEffectorHold;
-import frc.robot.commands.garraCommands.EndEffectorIn;
-import frc.robot.commands.garraCommands.EndEffectorOut;
+import frc.robot.commands.endEffectorCommands.EndEffectorHold;
+import frc.robot.commands.endEffectorCommands.EndEffectorIn;
+import frc.robot.commands.endEffectorCommands.EndEffectorOut;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EndEffector;
@@ -62,6 +63,6 @@ public class RobotContainer {
 
   
   public Command getAutonomousCommand() {
-    return null;
+    return new MoveDistance(m_DriveTrain, 400);
   }
 }
