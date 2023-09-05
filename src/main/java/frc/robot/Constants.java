@@ -44,7 +44,7 @@ public final class Constants {
     public static final double kTicksToMeters = 0.13888889;
     public static final double kArmUpSpeed = 0.4;
     public static final double kArmDownSpeed = -0.4;
-    public static final double kArmTolerance = 1;
+    public static final double kArmTolerance = 1.5;
     public static final double kEndEffectorSpeedIn = -0.3;
     public static final double kEndEffectorSpeedOut = 0.5;
     public static final double kEndEffectorSpeedHold = -0.05;
