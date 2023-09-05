@@ -28,7 +28,7 @@ public class EndEffector extends SubsystemBase {
      * Sets the speed of the end effector motor
      * @param speed Desired speed
      */
-    public void garraSet(double speed) {
+    public void endEffectorSet(double speed) {
         m_grabberMotor.set(speed);
     }
 
