@@ -1,15 +1,15 @@
-package frc.robot.commands.garraCommands;
+package frc.robot.commands.endEffectorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.EndEffector;
 
 public class EndEffectorOut extends CommandBase {
-    private EndEffector garra;
+    private EndEffector endEffector;
 
-    public EndEffectorOut(EndEffector garra){
-        this.garra = garra;
-        addRequirements(garra);
+    public EndEffectorOut(EndEffector endEffector){
+        this.endEffector = endEffector;
+        addRequirements(endEffector);
     }
 
     @Override
@@ -17,13 +17,13 @@ public class EndEffectorOut extends CommandBase {
 
     @Override
     public void execute() {
-        garra.garraSet(Constants.Robot.kEndEffectorSpeedOut);
+        endEffector.endEffectorSet(Constants.Robot.kEndEffectorSpeedOut);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        garra.garraSet(0);
+        endEffector.endEffectorSet(0);
     }
 
     // Returns true when the command should end.

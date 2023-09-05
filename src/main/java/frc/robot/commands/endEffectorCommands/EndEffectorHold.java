@@ -1,15 +1,15 @@
-package frc.robot.commands.garraCommands;
+package frc.robot.commands.endEffectorCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.EndEffector;
 
 public class EndEffectorHold extends CommandBase {
-  private EndEffector garra;
+  private EndEffector endEffector;
 
-  public EndEffectorHold(EndEffector garra){
-    this.garra = garra;
-    addRequirements(garra);
+  public EndEffectorHold(EndEffector endEffector){
+    this.endEffector = endEffector;
+    addRequirements(endEffector);
   }
 
   @Override
@@ -17,12 +17,12 @@ public class EndEffectorHold extends CommandBase {
 
   @Override
   public void execute() {
-    garra.garraSet(Constants.Robot.kEndEffectorSpeedHold);
+    endEffector.endEffectorSet(Constants.Robot.kEndEffectorSpeedHold);
   }
   
   @Override
   public void end(boolean interrupted) {
-    garra.garraSet(0);
+    endEffector.endEffectorSet(0);
   }
 
   @Override
