@@ -34,11 +34,11 @@ public class DriveTrain extends SubsystemBase {
     private final Encoder m_rightEncoder = new Encoder(Constants.Sensors.kRightEncoderPorts[0], Constants.Sensors.kRightEncoderPorts[1]);
 
   // Initialize the Gyro
-  //private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
+  private final AHRS m_gyro = new AHRS(I2C.Port.kMXP);
 
   // Kinematics and Odometry Instances
   private final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(Constants.Robot.kWidthInches));
-    //private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
 
   public DriveTrain() {
     // Reset NavX
@@ -64,23 +64,14 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Smart Dashboard Data
-<<<<<<< HEAD
     SmartDashboard.putNumber("Left Encoder", m_leftEncoder.get());
     SmartDashboard.putNumber("Right Encoder", m_rightEncoder.get());
-    //SmartDashboard.putString("Position 2d", m_odometry.toString());
-    //SmartDashboard.putNumber("Angle", getYawAngle());
-=======
-    SmartDashboard.putNumber("Left Encoder", m_leftEncoder.getDistance());
-    SmartDashboard.putNumber("Right Encoder", m_rightEncoder.getDistance());
-    SmartDashboard.putString("Odometer", m_odometry.toString());
-    SmartDashboard.putNumber("Pitch", getPitchAngle());
-    SmartDashboard.putNumber("Yaw", getYawAngle());
-    SmartDashboard.putNumber("Roll", getRollAngle());
->>>>>>> fd251089f3325af3c8e187399f39a79ff26fdb75
+    SmartDashboard.putString("Position 2d", m_odometry.toString());
+    SmartDashboard.putNumber("Angle", getYawAngle());
 
     //Update the odometry in the periodic block
 
-    //m_odometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+    m_odometry.update(getYawRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
   }
 
   // Subsystem Functions ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,11 +139,8 @@ public class DriveTrain extends SubsystemBase {
   * Converts the angle of the robot to a Rotation2d.
   * @return The Yaw angle of the robot as a Rotation2d.
   */ 
-  /* public final Rotation2d getYawRotation2d() {
+  public final Rotation2d getYawRotation2d() {
     return Rotation2d.fromDegrees(getYawAngle());
-<<<<<<< HEAD
-  }  */
-=======
   }
 
   /**
@@ -163,18 +151,12 @@ public class DriveTrain extends SubsystemBase {
   public final double getPitchAngle() {
     return m_gyro.getPitch();
   }
->>>>>>> fd251089f3325af3c8e187399f39a79ff26fdb75
 
   /**
   * Obtains the Yaw angle of the robot obtained from the NavX.
   * (Yaw is the angle the robot is facing, since the gryoscope is mounted facing up, it returns the Roll angle)
   * @return The Roll angle of the robot in degrees.
   */
-<<<<<<< HEAD
-  /* public final double getYawAngle() {
-    return m_gyro.getRoll();
-  }  */
-=======
   public final double getYawAngle() {
     // a ver que hace
     return m_gyro.getYaw();
@@ -189,5 +171,4 @@ public class DriveTrain extends SubsystemBase {
     // a ver que hace
     return m_gyro.getRoll();
   }
->>>>>>> fd251089f3325af3c8e187399f39a79ff26fdb75
 }
