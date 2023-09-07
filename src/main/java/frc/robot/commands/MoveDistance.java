@@ -10,7 +10,7 @@ public class MoveDistance extends CommandBase {
 
   private final DriveTrain m_driveTrain;
   private final double distance;
-  private final double speed;
+  private double speed;
 
   /**
    * 
@@ -18,11 +18,11 @@ public class MoveDistance extends CommandBase {
    * @param distance The distance in cm that the robot will travel
    * @param xSpeed The speed at which the robot is moving (Recommended 0.5)
    */
-  public MoveDistance(DriveTrain m_DriveTrain2, double distance) {
-    this.m_driveTrain = m_DriveTrain2;
+  public MoveDistance(DriveTrain m_DriveTrain, double distance) {
+    this.m_driveTrain = m_DriveTrain;
     this.distance = distance;
     this.speed = -0.5;
-    addRequirements(m_DriveTrain2);
+    addRequirements(m_DriveTrain);
   }
 
   /**
@@ -31,15 +31,19 @@ public class MoveDistance extends CommandBase {
    * @param distance The distance in cm that the robot will travel
    * @param Speed The speed at which the robot is moving (Recommended 0.5)
    */
-  public MoveDistance(DriveTrain m_DriveTrain2, double distance, double speed){
-    this.m_driveTrain = m_DriveTrain2;
+  public MoveDistance(DriveTrain m_DriveTrain, double distance, double speed){
+    this.m_driveTrain = m_DriveTrain;
     this.distance = distance;
     this.speed = -speed;
-    addRequirements(m_DriveTrain2);
+    addRequirements(m_DriveTrain);
   }
 
   @Override
   public void initialize() {
+    m_driveTrain.resetEncoders();
+    if (distance<0) {
+      speed = -speed;
+    }
   }
 
   @Override
@@ -54,7 +58,7 @@ public class MoveDistance extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    if(m_driveTrain.getEncodersDistance()>distance) {
+    if(Math.abs(m_driveTrain.getEncodersDistance())>Math.abs(distance)) {
       return true;
     } else {
       return false;

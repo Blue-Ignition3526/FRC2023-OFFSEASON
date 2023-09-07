@@ -136,6 +136,11 @@ public class DriveTrain extends SubsystemBase {
     return (m_leftEncoder.getDistance()+m_rightEncoder.getDistance())/2;
   }
 
+  public void resetEncoders() {
+    m_leftEncoder.reset();
+    m_rightEncoder.reset();
+  }
+
   /**
   * Converts the angle of the robot to a Rotation2d.
   * @return The Yaw angle of the robot as a Rotation2d.

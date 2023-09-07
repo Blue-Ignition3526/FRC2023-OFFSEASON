@@ -1,7 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Drive;
@@ -10,7 +13,9 @@ import frc.robot.commands.armCommands.ArmDown;
 import frc.robot.commands.armCommands.ArmUp;
 import frc.robot.commands.armCommands.UpdateArmPosition;
 import frc.robot.commands.autonomous.AutoBalance;
+import frc.robot.commands.autonomous.LeaveCommunity;
 import frc.robot.commands.autonomous.LeaveGamePiece;
+import frc.robot.commands.autonomous.LeaveGamePieceAndBalance;
 import frc.robot.commands.autonomous.LeaveGamePieceAndLeaveCommunity;
 import frc.robot.commands.endEffectorCommands.EndEffectorHold;
 import frc.robot.commands.endEffectorCommands.EndEffectorIn;
@@ -31,21 +36,27 @@ public class RobotContainer {
 
   // Driver Controller
   private final Trigger m_DC_aButton = m_driverController.a();
-    private final Trigger m_DC_bButton = m_driverController.b();
-    private final Trigger m_DC_xButton = m_driverController.x();
-    private final Trigger m_DC_yButton = m_driverController.y();
+  private final Trigger m_DC_bButton = m_driverController.b();
+  private final Trigger m_DC_xButton = m_driverController.x();
+  private final Trigger m_DC_yButton = m_driverController.y();
 
-    private final Trigger m_DC_povUp = m_driverController.povUp();
-    private final Trigger m_DC_povDown = m_driverController.povDown();
-    private final Trigger m_DC_povRight = m_driverController.povRight();
-    private final Trigger m_DC_povLeft = m_driverController.povLeft();
+  private final Trigger m_DC_povUp = m_driverController.povUp();
+  private final Trigger m_DC_povDown = m_driverController.povDown();
+  private final Trigger m_DC_povRight = m_driverController.povRight();
+  private final Trigger m_DC_povLeft = m_driverController.povLeft();
 
-    private final Trigger m_DC_rightTrigger = m_driverController.rightTrigger();
-    private final Trigger m_DC_leftTrigger = m_driverController.leftTrigger();
+  private final Trigger m_DC_rightTrigger = m_driverController.rightTrigger();
+  private final Trigger m_DC_leftTrigger = m_driverController.leftTrigger();
 
-
+  private final SendableChooser<String> autonomousChooser = new SendableChooser<>();
   
   public RobotContainer() {
+    autonomousChooser.addOption("Do nothing", null);
+    autonomousChooser.addOption("Leave Community", "leaveCommunity");
+    autonomousChooser.addOption("Leave Game Piece", "leaveGamePiece");
+    autonomousChooser.addOption("Leave Game Piece and Leave Community", "leaveGamePieceAndLeaveCommunity");
+    autonomousChooser.addOption("Leave Game Piece and Balance", "leaveGamePieceAndBalance");
+    SmartDashboard.putData(autonomousChooser);
     m_DriveTrain.setDefaultCommand(new Drive(m_DriveTrain, () -> m_driverController.getLeftY(), () -> m_driverController.getRightX()));
     configureBindings();
   }
@@ -71,7 +82,12 @@ public class RobotContainer {
 
   
   public Command getAutonomousCommand() {
-    //return new MoveDistance(m_DriveTrain, 400);
-    return new LeaveGamePieceAndLeaveCommunity(m_brazo, m_garra, m_DriveTrain);
+    switch(autonomousChooser.getSelected()) {
+      case "leaveCommunity": return new LeaveCommunity(m_DriveTrain);
+      case "leaveGamePiece": return new LeaveGamePiece(m_brazo, m_garra);
+      case "leaveGamePieceAndLeaveCommunity": return new LeaveGamePieceAndLeaveCommunity(m_brazo, m_garra, m_DriveTrain);
+      case "leaveGamePieceAndBalance": return new LeaveGamePieceAndBalance(m_brazo, m_garra, m_DriveTrain);
+      default: return null;
+    }
   }
 }

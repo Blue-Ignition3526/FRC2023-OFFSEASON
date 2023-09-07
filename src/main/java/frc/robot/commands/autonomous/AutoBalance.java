@@ -14,7 +14,7 @@ import frc.robot.subsystems.DriveTrain;
 
 public class AutoBalance extends CommandBase {
   private final DriveTrain m_driveTrain;
-  private final PIDController pid = new PIDController(0.01, 0.0015, 0.0055);
+  private final PIDController pid = new PIDController(0.01, 0.0, 0.0055);
   private final SlewRateLimiter xLimiter; // Limiters for acceleration
 
   public AutoBalance(DriveTrain m_driveTrain) {

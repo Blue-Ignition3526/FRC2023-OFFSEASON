@@ -12,6 +12,7 @@ public class EndEffectorOutSeconds extends CommandBase {
 
     public EndEffectorOutSeconds(EndEffector endEffector, double seconds) {
         this.seconds = seconds;
+        this.endEffector = endEffector;
         addRequirements(endEffector);
     }
 
