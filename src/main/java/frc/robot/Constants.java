@@ -48,6 +48,8 @@ public final class Constants {
     public static final double kEndEffectorSpeedIn = -0.3;
     public static final double kEndEffectorSpeedOut = 0.5;
     public static final double kEndEffectorSpeedHold = -0.05;
+    public static final double kMaxAutoBalanceSpeed = 0.75;
+    public static final double kAutoBalanceSpeed = 0.55;
   }
 
   public static class ArmPositions {

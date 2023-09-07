@@ -10,17 +10,32 @@ public class MoveDistance extends CommandBase {
 
   private final DriveTrain m_driveTrain;
   private final double distance;
+  private final double speed;
 
   /**
    * 
-   * @param m_driveTrain The drivetrain subsystem
+   * @param m_DriveTrain2 The drivetrain subsystem
    * @param distance The distance in cm that the robot will travel
    * @param xSpeed The speed at which the robot is moving (Recommended 0.5)
    */
-  public MoveDistance(DriveTrain m_driveTrain, double distance) {
-    this.m_driveTrain = m_driveTrain;
+  public MoveDistance(DriveTrain m_DriveTrain2, double distance) {
+    this.m_driveTrain = m_DriveTrain2;
     this.distance = distance;
-    addRequirements(m_driveTrain);
+    this.speed = -0.5;
+    addRequirements(m_DriveTrain2);
+  }
+
+  /**
+   * 
+   * @param m_DriveTrain2 The drivetrain subsystem
+   * @param distance The distance in cm that the robot will travel
+   * @param Speed The speed at which the robot is moving (Recommended 0.5)
+   */
+  public MoveDistance(DriveTrain m_DriveTrain2, double distance, double speed){
+    this.m_driveTrain = m_DriveTrain2;
+    this.distance = distance;
+    this.speed = -speed;
+    addRequirements(m_DriveTrain2);
   }
 
   @Override
@@ -29,7 +44,7 @@ public class MoveDistance extends CommandBase {
 
   @Override
   public void execute() {
-    m_driveTrain.setMotors(-0.5);
+    m_driveTrain.setMotors(speed);
   }
 
   @Override

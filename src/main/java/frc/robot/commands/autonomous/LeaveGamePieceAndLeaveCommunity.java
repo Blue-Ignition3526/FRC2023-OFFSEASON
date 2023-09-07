@@ -6,21 +6,22 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
-import frc.robot.commands.armCommands.UpdateArmPosition;
-import frc.robot.commands.endEffectorCommands.EndEffectorOutSeconds;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.EndEffector;
 
-public class LeaveGamePiece extends SequentialCommandGroup {
-  /** Creates a new LeaveGamePiece. */
-  public LeaveGamePiece(Arm m_brazo, EndEffector m_grabber) {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+public class LeaveGamePieceAndLeaveCommunity extends SequentialCommandGroup {
+  /** Creates a new LeaveGamePieceAndLeaveCommunity. */
+  public LeaveGamePieceAndLeaveCommunity(Arm arm, EndEffector endEffector, DriveTrain driveTrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new UpdateArmPosition(m_brazo, Constants.ArmPositions.kHigh),
+      new LeaveGamePiece(arm, endEffector),
       new WaitCommand(0.1),
-      new EndEffectorOutSeconds(m_grabber, 0.25)
+      new LeaveCommunity(driveTrain)
     );
   }
 }

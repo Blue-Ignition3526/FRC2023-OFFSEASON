@@ -67,7 +67,8 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Encoder", m_leftEncoder.get());
     SmartDashboard.putNumber("Right Encoder", m_rightEncoder.get());
     SmartDashboard.putString("Position 2d", m_odometry.toString());
-    SmartDashboard.putNumber("Angle", getYawAngle());
+    SmartDashboard.putNumber("Yaw", getYawAngle());
+    SmartDashboard.putNumber("Pitch", getPitchAngle());
 
     //Update the odometry in the periodic block
 

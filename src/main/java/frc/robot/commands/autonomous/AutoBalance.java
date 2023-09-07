@@ -4,18 +4,23 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.Drive;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 
 public class AutoBalance extends CommandBase {
   private final DriveTrain m_driveTrain;
-  private double direction;
+  private final PIDController pid = new PIDController(0.01, 0.0015, 0.0055);
+  private final SlewRateLimiter xLimiter; // Limiters for acceleration
 
   public AutoBalance(DriveTrain m_driveTrain) {
     this.m_driveTrain = m_driveTrain;
-    // Use addRequirements() here to declare subsystem dependencies.
+    this.pid.setSetpoint(0);
+    this.xLimiter = new SlewRateLimiter(Constants.Robot.kMaxAccelerationMetersPerSecond);
     addRequirements(m_driveTrain);
   }
 
@@ -26,20 +31,18 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_driveTrain.getPitchAngle() > 0){
-      m_driveTrain.arcadeDrive(new ChassisSpeeds(0.4, 0, 0));
-    }else if (m_driveTrain.getPitchAngle() < 0){
-      m_driveTrain.arcadeDrive(new ChassisSpeeds(-0.4, 0, 0));
-    }
+    double pidResult = MathUtil.clamp(pid.calculate(m_driveTrain.getPitchAngle()), -Constants.Robot.kMaxAutoBalanceSpeed, Constants.Robot.kMaxAutoBalanceSpeed);
+    double xSpeed = xLimiter.calculate(pidResult) * Constants.Robot.kMaxAngularSpeedRadiansPerSecond;
+    System.out.println(xSpeed);
+    m_driveTrain.arcadeDrive(new ChassisSpeeds(xSpeed, 0, 0));
   }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_driveTrain.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(m_driveTrain.getPitchAngle()) < 5;
   }
 }

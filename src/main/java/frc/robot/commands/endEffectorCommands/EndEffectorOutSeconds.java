@@ -1,19 +1,25 @@
 package frc.robot.commands.endEffectorCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.EndEffector;
 
-public class EndEffectorOut extends CommandBase {
+public class EndEffectorOutSeconds extends CommandBase {
     private EndEffector endEffector;
+    private Timer timer = new Timer();
+    private double seconds;
 
-    public EndEffectorOut(EndEffector endEffector){
-        this.endEffector = endEffector;
+    public EndEffectorOutSeconds(EndEffector endEffector, double seconds) {
+        this.seconds = seconds;
         addRequirements(endEffector);
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        timer.reset();
+        timer.start();
+    }
 
     @Override
     public void execute() {
@@ -29,7 +35,6 @@ public class EndEffectorOut extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        //return !endEffector.hasPiece();
-        return false;
+        return timer.get() >= this.seconds;
     }
 }

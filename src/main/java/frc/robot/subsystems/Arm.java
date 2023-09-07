@@ -44,9 +44,9 @@ public class Arm extends SubsystemBase {
   /**
    * Gets the absolute position of the arm relative to the floor
    * @return The angle in degrees of the arm
-   */
+   */ 
   public double getArmAngle(){
-    return ((m_armEncoder.getAbsolutePosition() * 360)-373)*-1;
+    return ((m_armEncoder.getAbsolutePosition() * 360)-283)*-1;
   }
 
   /**

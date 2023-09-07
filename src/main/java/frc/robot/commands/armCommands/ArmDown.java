@@ -18,7 +18,7 @@ public class ArmDown extends CommandBase {
 
   @Override
   public void execute() {
-    if (m_Brazo.getArmAngle() >= 23) {
+    if (m_Brazo.getArmAngle() >= 18) {
       m_Brazo.setMotors(Constants.Robot.kArmDownSpeed);
     }
   }
